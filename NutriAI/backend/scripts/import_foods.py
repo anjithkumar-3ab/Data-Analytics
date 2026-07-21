@@ -1,49 +1,37 @@
 import os
 import pandas as pd
+from dotenv import load_dotenv
 from pymongo import MongoClient
 
-# -----------------------------
-# MongoDB Connection
-# -----------------------------
-client = MongoClient("mongodb://127.0.0.1:27017")
+load_dotenv()
 
-db = client["nutriai"]
+MONGODB_URI = os.getenv("MONGODB_URI", "")
+DATABASE_NAME = os.getenv("DATABASE_NAME", "")
 
-foods_collection = db["foods"]
+client = MongoClient(MONGODB_URI)
+db = client[DATABASE_NAME]
 
-# -----------------------------
-# File Path
-# -----------------------------
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+collection = db["foods"]
 
-CSV_FILE = os.path.join(
-    BASE_DIR,
+csv_path = os.path.join(
+    os.path.dirname(__file__),
+    "..",
     "data",
     "processed",
     "foods_clean.csv"
 )
 
-print(f"Reading: {CSV_FILE}")
+csv_path = os.path.abspath(csv_path)
 
-# -----------------------------
-# Load CSV
-# -----------------------------
-df = pd.read_csv(CSV_FILE)
+print(f"Loading: {csv_path}")
 
-print(f"Rows Found: {len(df)}")
+df = pd.read_csv(csv_path)
 
-# -----------------------------
-# Remove Existing Data
-# -----------------------------
-foods_collection.delete_many({})
+records = df.to_dict(orient="records")
 
-print("Old data removed.")
+collection.delete_many({})
 
-# -----------------------------
-# Insert New Data
-# -----------------------------
-foods_collection.insert_many(
-    df.to_dict(orient="records")
-)
+if records:
+    collection.insert_many(records)
 
-print(f"Successfully imported {len(df)} foods.")
+print(f"✅ Imported {len(records)} food records into MongoDB Atlas.")

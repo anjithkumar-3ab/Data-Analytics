@@ -1,0 +1,11 @@
+export { default as Hero } from './Hero';
+export { default as About } from './About';
+export { default as Features } from './Features';
+export { default as TechStack } from './TechStack';
+export { default as DashboardPreview } from './DashboardPreview';
+export { default as AiRecommendationPreview } from './AiRecommendationPreview';
+export { default as AnalyticsPreview } from './AnalyticsPreview';
+export { default as PowerBiPreview } from './PowerBiPreview';
+export { default as AdminPreview } from './AdminPreview';
+export { default as Stats } from './Stats';
+export { default as Developer } from './Developer';

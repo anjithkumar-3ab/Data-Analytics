@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nutri_ai_frontend
+    ports:
+      - "3000:80"
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+      VITE_POWERBI_CLIENT_ID: ${VITE_POWERBI_CLIENT_ID:-}
+      VITE_POWERBI_WORKSPACE_ID: ${VITE_POWERBI_WORKSPACE_ID:-}
+    depends_on:
+      - backend
+    networks:
+      - nutri-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nutri_ai_backend
+    ports:
+      - "8000:8000"
+    environment:
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017}
+      DATABASE_NAME: ${DATABASE_NAME:-nutriai}
+      JWT_SECRET: ${JWT_SECRET:-supersecretjwtkey}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:5173}
+    depends_on:
+      - mongo
+    networks:
+      - nutri-net
+
+  mongo:
+    image: mongo:7.0
+    container_name: nutri_ai_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: ${DATABASE_NAME:-nutriai}
+    networks:
+      - nutri-net
+
+networks:
+  nutri-net:
+    driver: bridge
+
+volumes:
+  mongo_data:
+    driver: local

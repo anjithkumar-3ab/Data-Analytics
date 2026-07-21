@@ -1,0 +1,6 @@
+src/pages/HistoryPage.tsx(181,9): error TS6133: 'handlePreview' is declared but its value is never read.
+src/pages/RecommendationDetails.tsx(5,48): error TS6133: 'Flame' is declared but its value is never read.
+src/pages/RecommendationDetails.tsx(6,3): error TS6133: 'Activity' is declared but its value is never read.
+src/pages/RecommendationDetails.tsx(6,13): error TS6133: 'Zap' is declared but its value is never read.
+src/pages/RecommendationDetails.tsx(6,18): error TS6133: 'Scale' is declared but its value is never read.
+src/pages/RecommendationDetails.tsx(6,25): error TS6133: 'Droplets' is declared but its value is never read.

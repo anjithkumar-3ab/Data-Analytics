@@ -1,0 +1,24 @@
+// Example 1: Transform Profiles table
+let
+    Source = Csv.Document(File.Contents("C:\\path\\to\\Profiles.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+    ChangedTypes = Table.TransformColumnTypes(PromotedHeaders, {{"age", Int64.Type}, {"height", type number}, {"weight", type number}, {"bmi", type number}, {"bmr", type number}, {"tdee", type number}, {"daily_calories", type number}}),
+    RemovedNulls = Table.SelectRows(ChangedTypes, each not List.IsEmpty(List.RemoveNulls(Record.FieldValues(_)))),
+    RemovedDuplicates = Table.Distinct(RemovedNulls)
+in
+    RemovedDuplicates
+
+// Example 2: Create a calendar table
+let
+    StartDate = #date(2024, 1, 1),
+    EndDate = Date.EndOfYear(Date.From(DateTime.LocalNow())),
+    Dates = List.Dates(StartDate, Number.From(EndDate - StartDate) + 1, #duration(1,0,0,0)),
+    TableFromDates = Table.FromList(Dates, Splitter.SplitByNothing(), {"Date"}),
+    AddedColumns = Table.AddColumn(TableFromDates, "Year", each Date.Year([Date]), type number),
+    AddedQuarter = Table.AddColumn(AddedColumns, "Quarter", each Date.QuarterOfYear([Date]), type number),
+    AddedMonth = Table.AddColumn(AddedQuarter, "Month", each Date.Month([Date]), type number),
+    AddedMonthName = Table.AddColumn(AddedMonth, "MonthName", each Date.MonthName([Date]), type text),
+    AddedWeek = Table.AddColumn(AddedMonthName, "Week", each Date.WeekOfYear([Date]), type number),
+    AddedDay = Table.AddColumn(AddedWeek, "Day", each Date.Day([Date]), type number)
+in
+    AddedDay

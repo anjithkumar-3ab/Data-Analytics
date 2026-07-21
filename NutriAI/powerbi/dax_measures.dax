@@ -1,0 +1,56 @@
+// Core KPI measures
+Total Users = DISTINCTCOUNT(DimUser[UserId])
+
+Active Users = CALCULATE(DISTINCTCOUNT(DimUser[UserId]), FILTER(FactDailyProgress, FactDailyProgress[Date] >= TODAY() - 30))
+
+Total Recommendations = COUNTROWS(FactRecommendations)
+
+Recommendations Today = CALCULATE(COUNTROWS(FactRecommendations), FactRecommendations[Date] = TODAY())
+
+Average BMI = AVERAGE(FactDailyProgress[BMI])
+
+Average BMR = AVERAGE(FactDailyProgress[BMR])
+
+Average TDEE = AVERAGE(FactDailyProgress[TDEE])
+
+Average Daily Calories = AVERAGE(FactDailyProgress[DailyCalories])
+
+Average Protein = AVERAGE(FactNutrition[Protein])
+
+Average Fat = AVERAGE(FactNutrition[Fat])
+
+Average Carbohydrates = AVERAGE(FactNutrition[Carbohydrates])
+
+Average Water Intake = AVERAGE(FactNutrition[WaterIntake])
+
+Average Weight = AVERAGE(FactDailyProgress[Weight])
+
+Average Height = AVERAGE(FactDailyProgress[Height])
+
+Calories Consumed = SUM(FactNutrition[Calories])
+
+Calories Burned = SUM(FactDailyProgress[DailyCalories])
+
+Goal Achievement % = DIVIDE([Calories Consumed], [Calories Burned], 0)
+
+// Recommendation-specific measures
+Recommendations by Goal = COUNTROWS(FactRecommendations)
+
+Recommendations by Diet = COUNTROWS(FactRecommendations)
+
+Recommendations by Activity = COUNTROWS(FactRecommendations)
+
+Success Rate = DIVIDE(CALCULATE(COUNTROWS(FactRecommendations), FactRecommendations[RecommendationStatus] = "Success"), COUNTROWS(FactRecommendations), 0)
+
+// Admin measures
+Total Foods = DISTINCTCOUNT(DimFood[FoodId])
+
+Most Popular Foods = TOPN(1, VALUES(DimFood[FoodName]), [Recommendations by Goal], DESC)
+
+Average Recommendation Time = AVERAGE(FactRecommendations[RecommendationDurationMinutes])
+
+Daily API Requests = SUM(FactRecommendations[ApiRequestCount])
+
+Active Sessions = DISTINCTCOUNT(FactRecommendations[SessionId])
+
+Recommendations Generated = COUNTROWS(FactRecommendations)
