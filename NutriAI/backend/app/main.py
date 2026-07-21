@@ -109,8 +109,9 @@ app = FastAPI(
 # ---------------------------------------------------------------------------
 
 ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vite dev server
-    "http://localhost:3000",  # Alternate React dev server
+    "http://localhost:5173",  # Vite dev server (legacy)
+    "http://localhost:3000",  # Alternate React dev server (legacy)
+    "http://localhost:8501",  # Streamlit dev server
 ]
 
 app.add_middleware(

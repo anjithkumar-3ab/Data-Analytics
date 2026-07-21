@@ -17,10 +17,10 @@ def calculate_tdee(bmr, activity_level):
 
     activity = {
         "Sedentary": 1.2,
-        "Light": 1.375,
-        "Moderate": 1.55,
-        "Active": 1.725,
-        "Very Active": 1.9
+        "Lightly Active": 1.375,
+        "Moderately Active": 1.55,
+        "Very Active": 1.725,
+        "Athlete": 1.9,
     }
 
     return round(bmr * activity[activity_level], 2)
@@ -28,10 +28,10 @@ def calculate_tdee(bmr, activity_level):
 
 def calorie_goal(tdee, goal):
 
-    if goal == "Weight Loss":
+    if goal == "Lose Weight":
         return round(tdee - 500, 2)
 
-    elif goal == "Weight Gain":
+    elif goal == "Gain Weight" or goal == "Muscle Gain":
         return round(tdee + 500, 2)
 
     return round(tdee, 2)
