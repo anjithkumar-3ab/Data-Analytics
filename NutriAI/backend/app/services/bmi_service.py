@@ -25,3 +25,16 @@ def calculate_bmi(height_cm: float, weight_kg: float):
         "bmi": bmi,
         "category": category
     }
+
+
+def ideal_weight_range(height_cm: float):
+    """
+    Calculate ideal weight range based on healthy BMI (18.5 - 24.9).
+
+    height_cm : Height in centimeters
+    Returns (min_weight, max_weight) in kg
+    """
+    height_m = height_cm / 100
+    min_weight = round(18.5 * (height_m ** 2), 1)
+    max_weight = round(24.9 * (height_m ** 2), 1)
+    return min_weight, max_weight
